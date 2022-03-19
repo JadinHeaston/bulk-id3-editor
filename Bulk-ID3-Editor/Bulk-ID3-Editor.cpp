@@ -13,7 +13,7 @@ The 2D arrays have a limitation of ~5000,~5000 objects. This isn't enough.
 
 
 //Directory/File management
-#include <boost/filesystem.hpp>
+#include <filesystem>
 //iostream
 #include <iostream>
 //Long term text file management
@@ -96,17 +96,17 @@ std::string formatFilePath(std::string givenFile);
 void updateFileDB(bool recursiveSearch, std::string path, FILE* givenTempDBFile)
 {
     //Making the given path an actual boost-usable path. idk why
-    boost::filesystem::path dirPath(path);
-    boost::filesystem::directory_iterator end_itr;
+    std::filesystem::path dirPath(path);
+    std::filesystem::directory_iterator end_itr;
 
     //Creating a stringstream to hold the file size
     std::stringstream temporaryStringStreamFileAndDirSearch;
 
     //Checking whether to search recursively or not
     if (recursiveSearch) {
-        for (boost::filesystem::recursive_directory_iterator end, dir(dirPath); dir != end; ++dir) {
+        for (std::filesystem::recursive_directory_iterator end, dir(dirPath); dir != end; ++dir) {
             // If it's not a directory, list it. If you want to list directories too, just remove this check.
-            if (boost::filesystem::is_regular_file(dir->path())) {
+            if (std::filesystem::is_regular_file(dir->path())) {
                 // assign current file name to current_file for editing/saving.
                 std::string current_file = dir->path().string();
 
@@ -119,7 +119,7 @@ void updateFileDB(bool recursiveSearch, std::string path, FILE* givenTempDBFile)
                     std::fputs(delimitingCharacter.c_str(), givenTempDBFile);
 
                     //Obtaining filezise (in bytes) and placing it in the stringstream
-                    temporaryStringStreamFileAndDirSearch << boost::filesystem::file_size(current_file);
+                    temporaryStringStreamFileAndDirSearch << std::filesystem::file_size(current_file);
                     std::fputs(temporaryStringStreamFileAndDirSearch.str().c_str(), givenTempDBFile);
                     std::fputs(delimitingCharacter.c_str(), givenTempDBFile);
 
@@ -135,7 +135,7 @@ void updateFileDB(bool recursiveSearch, std::string path, FILE* givenTempDBFile)
     }
     else {
         // cycle through the directory
-        for (boost::filesystem::directory_iterator itr(dirPath); itr != end_itr; ++itr)
+        for (std::filesystem::directory_iterator itr(dirPath); itr != end_itr; ++itr)
         {
             // If it's not a directory, list it. If you want to list directories too, just remove this check.
             //if (boost::filesystem::is_regular_file(itr->path())) {
@@ -152,7 +152,7 @@ void updateFileDB(bool recursiveSearch, std::string path, FILE* givenTempDBFile)
                 std::fputs(delimitingCharacter.c_str(), givenTempDBFile);
 
                 //Obtaining filezise (in bytes) and placing it in the stringstream
-                temporaryStringStreamFileAndDirSearch << boost::filesystem::file_size(current_file);
+                temporaryStringStreamFileAndDirSearch << std::filesystem::file_size(current_file);
                 std::fputs(temporaryStringStreamFileAndDirSearch.str().c_str(), givenTempDBFile);
                 std::fputs(delimitingCharacter.c_str(), givenTempDBFile);
 
@@ -468,7 +468,7 @@ int main(int argc, char* argv[]) /*try*/
     }
 
     //Verifying path is legitimate. Closing program if it is not.
-    if (!boost::filesystem::is_directory(givenPath))
+    if (!std::filesystem::is_directory(givenPath))
     {
         std::cout << "Path provided was NOT found. (" << givenPath << ")" << std::endl;
         return 0;
@@ -548,17 +548,17 @@ int countFiles(std::string pathToDir, bool recursiveLookup, bool mp3Count)
     int directoryCounter = 0;
 
     //Making path a path it likes.
-    boost::filesystem::path dirPath(pathToDir);
+    std::filesystem::path dirPath(pathToDir);
 
     //Checking if user wanted a recursive lookup.
     if (recursiveLookup) {
         //boost::filesystem::recursive_directory_iterator end_itr;
         //Performing recursive searching...
-        for (boost::filesystem::recursive_directory_iterator end, dir(pathToDir); dir != end; ++dir) {
+        for (std::filesystem::recursive_directory_iterator end, dir(pathToDir); dir != end; ++dir) {
             //Count all items.
             directoryCounter++;
             // If it's not a directory, list it. If you want to list directories too, just remove this check.
-            if (boost::filesystem::is_regular_file(dir->path())) {
+            if (std::filesystem::is_regular_file(dir->path())) {
                 if (mp3Count)
                 {
                     // assign current file name to current_file for editing/saving.
@@ -579,14 +579,14 @@ int countFiles(std::string pathToDir, bool recursiveLookup, bool mp3Count)
     }
     else
     {
-        boost::filesystem::directory_iterator end_itr;
+        std::filesystem::directory_iterator end_itr;
         //Cycle through the GIVEN directory. No deeper. Any directories are just directories directly viewable.
-        for (boost::filesystem::directory_iterator itr(dirPath); itr != end_itr; ++itr)
+        for (std::filesystem::directory_iterator itr(dirPath); itr != end_itr; ++itr)
         {
             //Count all items.
             directoryCounter++;
             // If it's not a directory, list it. If you want to list directories too, just remove this check.
-            if (boost::filesystem::is_regular_file(itr->path())) {
+            if (std::filesystem::is_regular_file(itr->path())) {
                 //Count files specifically.
                 fileCounter++;
             }
@@ -604,30 +604,30 @@ int countDir(std::string pathToDir, bool recursiveLookup)
     int directoryCounter = 0;
 
     //Making path a path it likes.
-    boost::filesystem::path dirPath(pathToDir);
+    std::filesystem::path dirPath(pathToDir);
 
     //Checking if user wanted a recursive lookup.
     if (recursiveLookup) {
         //Performing recursive searching...
-        for (boost::filesystem::recursive_directory_iterator end, dir(pathToDir); dir != end; ++dir) {
+        for (std::filesystem::recursive_directory_iterator end, dir(pathToDir); dir != end; ++dir) {
             //Count all items.
             directoryCounter++;
             // If it's not a directory, list it. If you want to list directories too, just remove this check.
-            if (boost::filesystem::is_regular_file(dir->path())) {
+            if (std::filesystem::is_regular_file(dir->path())) {
                 //Count files specifically.
                 fileCounter++;
             }
         }
     }
     else {
-        boost::filesystem::directory_iterator end_itr;
+        std::filesystem::directory_iterator end_itr;
         //Cycle through the GIVEN directory. No deeper. Any directories are just directories directly viewable.
-        for (boost::filesystem::directory_iterator itr(dirPath); itr != end_itr; ++itr)
+        for (std::filesystem::directory_iterator itr(dirPath); itr != end_itr; ++itr)
         {
             //Count all items.
             directoryCounter++;
             // If it's not a directory, list it. If you want to list directories too, just remove this check.
-            if (boost::filesystem::is_regular_file(itr->path())) {
+            if (std::filesystem::is_regular_file(itr->path())) {
                 //Count files specifically.
                 fileCounter++;
             }
