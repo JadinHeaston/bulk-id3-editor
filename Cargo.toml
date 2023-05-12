@@ -1,0 +1,13 @@
+[package]
+name = "bulk-id3-editor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+id3 = "1.7.0"
+libsql-client = "0.26.0"
+md5 = "0.7.0"
+serde = "1.0.163"
+serde_json = "1.0.96"
